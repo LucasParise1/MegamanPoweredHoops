@@ -1220,6 +1220,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4406901658767806129, guid: 410915f67b8f41e4580048ae6f782001, type: 3}
+      propertyPath: _moveSpeed
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7315557304419935949, guid: 410915f67b8f41e4580048ae6f782001, type: 3}
       propertyPath: m_Name
       value: Ball
@@ -1281,6 +1285,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9173125583668117153, guid: 2833867d2617b6a4996cd670ce3f89eb, type: 3}
+      propertyPath: _ballPrefab
+      value: 
+      objectReference: {fileID: 4406901658767806129, guid: 410915f67b8f41e4580048ae6f782001, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

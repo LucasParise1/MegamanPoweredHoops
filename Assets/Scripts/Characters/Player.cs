@@ -7,6 +7,8 @@ public class Player : MonoBehaviour
     [SerializeField] private CharacterData _playerData;
     [SerializeField] private Rigidbody _rb;
     [SerializeField] private Transform _visualTransform;
+    [SerializeField] private Transform _ballSpawnPoint;
+    [SerializeField] private Ball _ballPrefab;
 
     [Header("Visual Settings")]
     [SerializeField] private Animator _visualBall;
@@ -44,9 +46,8 @@ public class Player : MonoBehaviour
 
         if (collision.gameObject.CompareTag(Tags.BALL) && !_hasBall)
         {
-            _hasBall = true;
+            SetHasBall(true);
             Destroy(collision.gameObject);
-            _visualBall.gameObject.SetActive(true);
         }
     }
 
@@ -102,6 +103,19 @@ public class Player : MonoBehaviour
             SetJumpAnimation(1);
             SetBallJump(true);
         }
+
+        if (Input.GetButtonDown("Jump") && !_isGrounded && _hasBall)
+        {
+            SetHasBall(false);
+            Ball ballToThrow = Instantiate(_ballPrefab, _ballSpawnPoint.position, _ballSpawnPoint.rotation);
+            ballToThrow.Throw();
+        }
+    }
+
+    private void SetHasBall(bool value)
+    {
+        _hasBall = value;
+        _visualBall.gameObject.SetActive(value);
     }
     #endregion
 
