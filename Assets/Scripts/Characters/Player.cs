@@ -8,10 +8,14 @@ public class Player : MonoBehaviour
     [SerializeField] private Rigidbody _rb;
     [SerializeField] private Transform _visualTransform;
 
+    [Header("Visual Settings")]
+    [SerializeField] private Animator _visualBall;
+
     private Animator _animatedCharacter;
     [SerializeField] private bool _canPlay;
     private bool _isAttacking;
     private bool _isGrounded;
+    private bool _hasBall;
     #endregion
 
     #region Lifecycle
@@ -35,6 +39,14 @@ public class Player : MonoBehaviour
         {
             _isGrounded = true;
             SetJumpAnimation(0);
+            SetBallJump(false);
+        }
+
+        if (collision.gameObject.CompareTag(Tags.BALL) && !_hasBall)
+        {
+            _hasBall = true;
+            Destroy(collision.gameObject);
+            _visualBall.gameObject.SetActive(true);
         }
     }
 
@@ -88,6 +100,7 @@ public class Player : MonoBehaviour
             _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z);
             _rb.AddForce(Vector3.up * _playerData.JumpForce, ForceMode.Impulse);
             SetJumpAnimation(1);
+            SetBallJump(true);
         }
     }
     #endregion
@@ -95,5 +108,9 @@ public class Player : MonoBehaviour
     #region Animations
     private void SetWalkAnimation(int value) => _animatedCharacter.SetInteger(AnimationsParameters.SPEED_VALUE, value);
     private void SetJumpAnimation(int value) => _animatedCharacter.SetInteger(AnimationsParameters.JUMP_VALUE, value);
+    private void SetBallJump(bool jump)
+    {
+        if (_hasBall) _visualBall.SetBool(AnimationsParameters.BALL_INAIR, jump);
+    }
     #endregion
 }

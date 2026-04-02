@@ -9,4 +9,7 @@ public static class AnimationsParameters
 
     //UI
     public const string FADE_VALUE = "FadeValue";
+
+    //Objects
+    public const string BALL_INAIR = "InAir";
 }
