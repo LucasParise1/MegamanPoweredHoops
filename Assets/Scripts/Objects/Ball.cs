@@ -3,25 +3,17 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     [SerializeField] private Rigidbody _rb;
-    [SerializeField] private float _jumpForce;
-    [SerializeField] private float _moveSpeed;
+    [SerializeField] private SphereCollider _collider;
+    [SerializeField] private float _throwForce;
 
-    private bool _isMoving;
-
-    private void Update()
-    {
-        if (_isMoving) transform.Translate(Vector3.forward * _moveSpeed * Time.deltaTime);
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (_isMoving) _isMoving = false;
-    }
+    private void Start() => Invoke(nameof(EnableCollider), 0.1f);
 
     public void Throw()
     {
         _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z);
-        _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
-        _isMoving = true;
+        _rb.AddForce(Vector3.up * _throwForce, ForceMode.Impulse);
+        _rb.AddForce(transform.forward * _throwForce, ForceMode.Impulse);
     }
+
+    private void EnableCollider() => _collider.enabled = true;
 }
