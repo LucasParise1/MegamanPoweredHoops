@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     private Animator _animatedCharacter;
     [SerializeField] private bool _canPlay;
     private bool _isAttacking;
+    private bool _isGrounded;
     #endregion
 
     #region Lifecycle
@@ -21,52 +22,78 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        Move();
+        if (_canPlay)
+        {
+            Move();
+            HandleJump();
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag(Tags.GROUND))
+        {
+            _isGrounded = true;
+            SetJumpAnimation(0);
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag(Tags.GROUND)) _isGrounded = false;
     }
     #endregion
 
     #region Private Methods
     private void SetUp(CharacterData data)
     {
-        _animatedCharacter = data.AnimatedPrefab;
+        _animatedCharacter = Instantiate(_playerData.AnimatedPrefab, _visualTransform);
     }
 
     private void Move()
     {
-        if (_canPlay)
+        if (_isAttacking)
         {
-            if (_isAttacking)
-            {
-                SetWalkAnimation(0);
-                return;
-            }
+            SetWalkAnimation(0);
+            return;
+        }
 
-            float horizontalInput = Input.GetAxisRaw("Horizontal");
-            float verticalInput = Input.GetAxisRaw("Vertical");
-            Vector3 cameraForward = Camera.main.transform.forward;
-            Vector3 cameraRight = Camera.main.transform.right;
-            cameraForward.y = 0;
-            cameraRight.y = 0;
-            cameraForward.Normalize();
-            cameraRight.Normalize();
+        float horizontalInput = Input.GetAxisRaw("Horizontal");
+        float verticalInput = Input.GetAxisRaw("Vertical");
+        Vector3 cameraForward = Camera.main.transform.forward;
+        Vector3 cameraRight = Camera.main.transform.right;
+        cameraForward.y = 0;
+        cameraRight.y = 0;
+        cameraForward.Normalize();
+        cameraRight.Normalize();
 
-            Vector3 moveDirection = (cameraForward * verticalInput + cameraRight * horizontalInput).normalized;
+        Vector3 moveDirection = (cameraForward * verticalInput + cameraRight * horizontalInput).normalized;
 
-            if (moveDirection != Vector3.zero)
-            {
-                Vector3 movement = moveDirection * _playerData.MoveSpeed * Time.deltaTime;
-                transform.Translate(movement, Space.World);
+        if (moveDirection != Vector3.zero)
+        {
+            Vector3 movement = moveDirection * _playerData.MoveSpeed * Time.deltaTime;
+            transform.Translate(movement, Space.World);
 
-                Quaternion targetRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
-                _visualTransform.rotation = Quaternion.RotateTowards(_visualTransform.rotation, targetRotation, _playerData.RotationSpeed * Time.deltaTime);
-            }
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
+            _visualTransform.rotation = Quaternion.RotateTowards(_visualTransform.rotation, targetRotation, _playerData.RotationSpeed * Time.deltaTime);
+        }
 
-            //SetWalkAnimation(moveDirection != Vector3.zero ? 1 : 0);
+        SetWalkAnimation(moveDirection != Vector3.zero ? 1 : 0);
+    }
+
+    private void HandleJump()
+    {
+        if (Input.GetButtonDown("Jump") && _isGrounded)
+        {
+            _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z);
+            _rb.AddForce(Vector3.up * _playerData.JumpForce, ForceMode.Impulse);
+            SetJumpAnimation(1);
         }
     }
     #endregion
 
     #region Animations
     private void SetWalkAnimation(int value) => _animatedCharacter.SetInteger(AnimationsParameters.SPEED_VALUE, value);
+    private void SetJumpAnimation(int value) => _animatedCharacter.SetInteger(AnimationsParameters.JUMP_VALUE, value);
     #endregion
 }

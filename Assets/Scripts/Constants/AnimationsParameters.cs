@@ -4,6 +4,7 @@ public static class AnimationsParameters
     public const string ATTACK_VALUE = "AttackValue";
     public const string EMOTE_VALUE = "EmoteValue";
     public const string SPEED_VALUE = "SpeedValue";
+    public const string JUMP_VALUE = "JumpValue";
     public const string HURT_VALUE = "HurtValue";
 
     //UI

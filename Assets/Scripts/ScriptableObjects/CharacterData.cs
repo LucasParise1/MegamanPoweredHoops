@@ -12,6 +12,7 @@ public class CharacterData : ScriptableObject
     [Header("Stats")]
     public float MoveSpeed;
     public float RotationSpeed;
+    public float JumpForce;
     public float AttackRechargeTime;
     public float AttackDuration;
 }
