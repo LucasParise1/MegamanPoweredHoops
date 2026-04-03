@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4782971db7b9124dadecd68fe80f8bf, type: 3}
   m_Name: Data_Char_Megaman
   m_EditorClassIdentifier: 
-  Icon: {fileID: 0}
+  Icon: {fileID: 1446672758, guid: 49fddf78c5520a042836e8b95a8546fb, type: 3}
   Name: Mega Man
   AnimatedPrefab: {fileID: 5913485514588316805, guid: d0edbb93eada50e46954844dac093eb6, type: 3}
   AttackPrefab: {fileID: 0}
   MoveSpeed: 5
   RotationSpeed: 500
   JumpForce: 15
-  AttackRechargeTime: 0
-  AttackDuration: 0
+  AttackRechargeTime: 10
+  AttackDuration: 1

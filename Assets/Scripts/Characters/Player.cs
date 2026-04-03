@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform _ballSpawnPoint;
     [SerializeField] private Ball _ballPrefab;
     [SerializeField] private GameObject _throwPreview;
+    [SerializeField] private UIManager _uiManager;
 
     [Header("Visual Settings")]
     [SerializeField] private Animator _visualBall;
@@ -19,6 +20,7 @@ public class Player : MonoBehaviour
     private bool _isAttacking;
     private bool _isGrounded;
     private bool _hasBall;
+    private float _currentCharge;
     #endregion
 
     #region Lifecycle
@@ -33,6 +35,8 @@ public class Player : MonoBehaviour
         {
             Move();
             HandleJump();
+            HandleCharge();
+            HandleAttack();
         }
     }
 
@@ -60,7 +64,11 @@ public class Player : MonoBehaviour
     #endregion
 
     #region Private Methods
-    private void SetUp(CharacterData data) => _animatedCharacter = Instantiate(_playerData.AnimatedPrefab, _visualTransform);
+    private void SetUp(CharacterData data)
+    {
+        _animatedCharacter = Instantiate(_playerData.AnimatedPrefab, _visualTransform);
+        _uiManager.SetGauge1MaxValue(_playerData.AttackRechargeTime);
+    }
 
     private void Move()
     {
@@ -121,6 +129,32 @@ public class Player : MonoBehaviour
         _hasBall = value;
         _visualBall.gameObject.SetActive(value);
     }
+
+    private void HandleCharge()
+    {
+        if (_currentCharge >= _playerData.AttackRechargeTime) return;
+
+        _currentCharge += Time.deltaTime;
+        _uiManager.UpdateCharge1UI(_currentCharge);
+    }
+
+    private void HandleAttack()
+    {
+        if (Input.GetButtonDown("Submit") && !_isAttacking && _currentCharge >= _playerData.AttackRechargeTime)
+        {
+            _isAttacking = true;
+            _currentCharge = 0;
+            SetAttackAnimation(1);
+            //Spawna o atk
+            Invoke(nameof(CancelAttack), _playerData.AttackDuration);
+        }
+    }
+
+    private void CancelAttack()
+    {
+        _isAttacking = false;
+        SetAttackAnimation(0);
+    }
     #endregion
 
     #region Public Methods
@@ -130,6 +164,7 @@ public class Player : MonoBehaviour
     #region Animations
     private void SetWalkAnimation(int value) => _animatedCharacter.SetInteger(AnimationsParameters.SPEED_VALUE, value);
     private void SetJumpAnimation(int value) => _animatedCharacter.SetInteger(AnimationsParameters.JUMP_VALUE, value);
+    private void SetAttackAnimation(int value) => _animatedCharacter.SetInteger(AnimationsParameters.ATTACK_VALUE, value);
     private void SetBallJump(bool jump)
     {
         if (_hasBall) _visualBall.SetBool(AnimationsParameters.BALL_INAIR, jump);
