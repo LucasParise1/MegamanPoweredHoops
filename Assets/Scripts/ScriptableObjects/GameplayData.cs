@@ -3,6 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GameplayData", menuName = "Scriptable Objects/GameplayData")]
 public class GameplayData : ScriptableObject
 {
+    public float MatchTime;
     public int Player1Points;
     public int Player2Points;
 

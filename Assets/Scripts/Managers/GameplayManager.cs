@@ -7,10 +7,24 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private UIManager _uiManager;
     [SerializeField] private Player _player;
 
+    private float _currentTime;
+    private bool _isPlaying;
+
     private void Start()
     {
         _gameplayData.ResetData();
+        _currentTime = _gameplayData.MatchTime;
+        _uiManager.UpdateTimer(_currentTime);
         StartCoroutine(CountDown());
+    }
+
+    private void Update()
+    {
+        if (_isPlaying)
+        {
+            HandleTimer();
+            _uiManager.UpdateTimer(_currentTime);
+        }
     }
 
     private IEnumerator CountDown()
@@ -30,5 +44,42 @@ public class GameplayManager : MonoBehaviour
         yield return new WaitForSeconds(1);
         _uiManager.HideCountdown();
         _player.SetCanPlay(true);
+        _isPlaying = true;
+    }
+
+    private void HandleTimer()
+    {
+        _currentTime -= Time.deltaTime;
+
+        if (_currentTime <= 0)
+        {
+            _currentTime = 0;
+            _isPlaying = false;
+            EndGame();
+        }
+    }
+
+    private void EndGame()
+    {
+        _player.SetCanPlay(false);
+        _uiManager.ShowFinishScreen(true);
+        Invoke(nameof(ShowVictorious), 3);
+    }
+
+    private void ShowVictorious()
+    {
+        if (_gameplayData.Player1Points > _gameplayData.Player2Points)
+        {
+            _player.SetVictory();
+            //bot set defeat
+        }
+
+        if (_gameplayData.Player1Points < _gameplayData.Player2Points)
+        {
+            _player.SetDefeat();
+            //bot set victory
+        }
+
+        if (_gameplayData.Player1Points == _gameplayData.Player2Points) _player.SetTie();
     }
 }

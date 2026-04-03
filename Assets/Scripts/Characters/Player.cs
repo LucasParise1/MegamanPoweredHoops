@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Ball _ballPrefab;
     [SerializeField] private GameObject _throwPreview;
     [SerializeField] private UIManager _uiManager;
+    [SerializeField] private GameObject _victoryCam;
 
     [Header("Visual Settings")]
     [SerializeField] private Animator _visualBall;
@@ -68,6 +69,7 @@ public class Player : MonoBehaviour
     {
         _animatedCharacter = Instantiate(_playerData.AnimatedPrefab, _visualTransform);
         _uiManager.SetGauge1MaxValue(_playerData.AttackRechargeTime);
+        _uiManager.UpdatePlayer1Icon(_playerData.Icon);
     }
 
     private void Move()
@@ -145,7 +147,8 @@ public class Player : MonoBehaviour
             _isAttacking = true;
             _currentCharge = 0;
             SetAttackAnimation(1);
-            //Spawna o atk
+            Projectile specialAttack = Instantiate(_playerData.AttackPrefab, transform.position, _visualTransform.rotation);
+            specialAttack.SetFromPlayer();
             Invoke(nameof(CancelAttack), _playerData.AttackDuration);
         }
     }
@@ -155,16 +158,51 @@ public class Player : MonoBehaviour
         _isAttacking = false;
         SetAttackAnimation(0);
     }
+
+    private void CancelStun()
+    {
+        SetCanPlay(true);
+        SetStunAnimation(0);
+    }
     #endregion
 
     #region Public Methods
-    public void SetCanPlay(bool canPlay) => _canPlay = canPlay;
+    public void SetCanPlay(bool canPlay)
+    {
+        _canPlay = canPlay;
+
+        if (!_canPlay) SetWalkAnimation(0);
+    }
+
+    public void SetStunned()
+    {
+        SetCanPlay(false);
+        SetStunAnimation(1);
+        Invoke(nameof(CancelStun), 3);
+    }
+
+    public void SetTie()
+    {
+        _victoryCam.SetActive(true);
+        _uiManager.ShowVictoryScreen("Tie!");
+    }
+
+    public void SetVictory()
+    {
+        _victoryCam.SetActive(true);
+        SetResultsAnimation(1);
+        _uiManager.ShowVictoryScreen(_playerData.Name + " Wins!");
+    }
+
+    public void SetDefeat() => SetResultsAnimation(2);
     #endregion
 
     #region Animations
     private void SetWalkAnimation(int value) => _animatedCharacter.SetInteger(AnimationsParameters.SPEED_VALUE, value);
     private void SetJumpAnimation(int value) => _animatedCharacter.SetInteger(AnimationsParameters.JUMP_VALUE, value);
     private void SetAttackAnimation(int value) => _animatedCharacter.SetInteger(AnimationsParameters.ATTACK_VALUE, value);
+    private void SetStunAnimation(int value) => _animatedCharacter.SetInteger(AnimationsParameters.HURT_VALUE, value);
+    private void SetResultsAnimation(int value) => _animatedCharacter.SetInteger(AnimationsParameters.EMOTE_VALUE, value);
     private void SetBallJump(bool jump)
     {
         if (_hasBall) _visualBall.SetBool(AnimationsParameters.BALL_INAIR, jump);
