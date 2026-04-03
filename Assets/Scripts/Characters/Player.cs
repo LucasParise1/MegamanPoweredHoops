@@ -9,12 +9,13 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform _visualTransform;
     [SerializeField] private Transform _ballSpawnPoint;
     [SerializeField] private Ball _ballPrefab;
+    [SerializeField] private GameObject _throwPreview;
 
     [Header("Visual Settings")]
     [SerializeField] private Animator _visualBall;
 
     private Animator _animatedCharacter;
-    [SerializeField] private bool _canPlay;
+    private bool _canPlay;
     private bool _isAttacking;
     private bool _isGrounded;
     private bool _hasBall;
@@ -42,6 +43,7 @@ public class Player : MonoBehaviour
             _isGrounded = true;
             SetJumpAnimation(0);
             SetBallJump(false);
+            _throwPreview.SetActive(false);
         }
 
         if (collision.gameObject.CompareTag(Tags.BALL) && !_hasBall)
@@ -58,10 +60,7 @@ public class Player : MonoBehaviour
     #endregion
 
     #region Private Methods
-    private void SetUp(CharacterData data)
-    {
-        _animatedCharacter = Instantiate(_playerData.AnimatedPrefab, _visualTransform);
-    }
+    private void SetUp(CharacterData data) => _animatedCharacter = Instantiate(_playerData.AnimatedPrefab, _visualTransform);
 
     private void Move()
     {
@@ -101,7 +100,12 @@ public class Player : MonoBehaviour
             _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z);
             _rb.AddForce(Vector3.up * _playerData.JumpForce, ForceMode.Impulse);
             SetJumpAnimation(1);
-            SetBallJump(true);
+
+            if (_hasBall)
+            {
+                SetBallJump(true);
+                _throwPreview.SetActive(true);
+            }
         }
 
         if (Input.GetButtonDown("Jump") && !_isGrounded && _hasBall)
@@ -117,6 +121,10 @@ public class Player : MonoBehaviour
         _hasBall = value;
         _visualBall.gameObject.SetActive(value);
     }
+    #endregion
+
+    #region Public Methods
+    public void SetCanPlay(bool canPlay) => _canPlay = canPlay;
     #endregion
 
     #region Animations
