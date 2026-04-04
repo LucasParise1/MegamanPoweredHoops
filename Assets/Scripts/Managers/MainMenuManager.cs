@@ -1,17 +1,31 @@
 using System.Collections;
+using Unity.Android.Gradle.Manifest;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
     [SerializeField] private Animator _fadeScreen;
     [SerializeField] private GameObject _mainMenu;
     [SerializeField] private GameObject _charSelectMenu;
+    [SerializeField] private GameplayData _gameplayData;
+    [SerializeField] private SceneAsset _nextScene;
 
     public void PlayButton()
     {
         _fadeScreen.SetInteger(AnimationsParameters.FADE_VALUE, 1);
         StartCoroutine(CharacterSelectionRoutine());
     }
+
+    public void SelectedPlayer(CharacterData data)
+    {
+        _gameplayData.SetSelectedPlayer(data);
+        _fadeScreen.SetInteger(AnimationsParameters.FADE_VALUE, 1);
+        Invoke(nameof(LoadNextScene), 1);
+    }
+
+    public void QuitGame() => UnityEngine.Application.Quit();
 
     private IEnumerator CharacterSelectionRoutine()
     {
@@ -25,5 +39,5 @@ public class MainMenuManager : MonoBehaviour
         _fadeScreen.SetInteger(AnimationsParameters.FADE_VALUE, 0);
     }
 
-    public void QuitGame() => Application.Quit();
+    private void LoadNextScene() => SceneManager.LoadScene(_nextScene.name);
 }

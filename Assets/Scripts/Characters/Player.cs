@@ -4,7 +4,7 @@ public class Player : MonoBehaviour
 {
     #region Variables
     [Header("Basic Settings")]
-    [SerializeField] private CharacterData _playerData;
+    [SerializeField] private GameplayData _gameplayData;
     [SerializeField] private Rigidbody _rb;
     [SerializeField] private Transform _visualTransform;
     [SerializeField] private Transform _ballSpawnPoint;
@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     [Header("Visual Settings")]
     [SerializeField] private Animator _visualBall;
 
+    private CharacterData _playerData;
     private Animator _animatedCharacter;
     private bool _canPlay;
     private bool _isAttacking;
@@ -25,10 +26,7 @@ public class Player : MonoBehaviour
     #endregion
 
     #region Lifecycle
-    private void Start()
-    {
-        SetUp(_playerData);
-    }
+    private void Start() => SetUp(_gameplayData._selectedPlayer);
 
     private void Update()
     {
@@ -67,6 +65,7 @@ public class Player : MonoBehaviour
     #region Private Methods
     private void SetUp(CharacterData data)
     {
+        _playerData = data;
         _animatedCharacter = Instantiate(_playerData.AnimatedPrefab, _visualTransform);
         _uiManager.SetGauge1MaxValue(_playerData.AttackRechargeTime);
         _uiManager.UpdatePlayer1Icon(_playerData.Icon);
@@ -118,12 +117,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (Input.GetButtonDown("Jump") && !_isGrounded && _hasBall)
-        {
-            SetHasBall(false);
-            Ball ballToThrow = Instantiate(_ballPrefab, _ballSpawnPoint.position, _ballSpawnPoint.rotation);
-            ballToThrow.Throw();
-        }
+        if (Input.GetButtonDown("Jump") && !_isGrounded && _hasBall) BallThrow();
     }
 
     private void SetHasBall(bool value)
@@ -146,11 +140,18 @@ public class Player : MonoBehaviour
         {
             _isAttacking = true;
             _currentCharge = 0;
-            SetAttackAnimation(1);
+            SetAttackAnimation(_playerData.AttackAnimStyle);
             Projectile specialAttack = Instantiate(_playerData.AttackPrefab, transform.position, _visualTransform.rotation);
             specialAttack.SetFromPlayer();
             Invoke(nameof(CancelAttack), _playerData.AttackDuration);
         }
+    }
+
+    private void BallThrow()
+    {
+        SetHasBall(false);
+        Ball ballToThrow = Instantiate(_ballPrefab, _ballSpawnPoint.position, _ballSpawnPoint.rotation);
+        ballToThrow.Throw();
     }
 
     private void CancelAttack()
@@ -178,6 +179,8 @@ public class Player : MonoBehaviour
     {
         SetCanPlay(false);
         SetStunAnimation(1);
+
+        if (_hasBall) BallThrow();
         Invoke(nameof(CancelStun), 3);
     }
 

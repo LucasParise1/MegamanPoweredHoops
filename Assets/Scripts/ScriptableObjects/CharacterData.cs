@@ -8,6 +8,7 @@ public class CharacterData : ScriptableObject
     public string Name;
     public Animator AnimatedPrefab;
     public Projectile AttackPrefab;
+    public int AttackAnimStyle;
 
     [Header("Stats")]
     public float MoveSpeed;

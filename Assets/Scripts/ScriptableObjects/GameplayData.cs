@@ -4,6 +4,7 @@ using UnityEngine;
 public class GameplayData : ScriptableObject
 {
     public float MatchTime;
+    public CharacterData _selectedPlayer;
     public int Player1Points;
     public int Player2Points;
 
@@ -15,6 +16,8 @@ public class GameplayData : ScriptableObject
         Player2Points = 0;
         _uiManager.UpdatePlayer1Score(Player1Points);
     }
+
+    public void SetSelectedPlayer(CharacterData player) => _selectedPlayer = player;
 
     public void SetUIManager(UIManager manager) => _uiManager = manager;
 

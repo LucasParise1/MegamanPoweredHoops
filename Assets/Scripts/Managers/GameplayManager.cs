@@ -1,11 +1,15 @@
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameplayManager : MonoBehaviour
 {
     [SerializeField] private GameplayData _gameplayData;
     [SerializeField] private UIManager _uiManager;
     [SerializeField] private Player _player;
+    [SerializeField] private Animator _fadeScreen;
+    [SerializeField] private SceneAsset _nextScene;
 
     private float _currentTime;
     private bool _isPlaying;
@@ -82,4 +86,12 @@ public class GameplayManager : MonoBehaviour
 
         if (_gameplayData.Player1Points == _gameplayData.Player2Points) _player.SetTie();
     }
+
+    public void ContinueButton()
+    {
+        _fadeScreen.SetInteger(AnimationsParameters.FADE_VALUE, 1);
+        Invoke(nameof(LoadNextScene), 1);
+    }
+
+    private void LoadNextScene() => SceneManager.LoadScene(_nextScene.name);
 }

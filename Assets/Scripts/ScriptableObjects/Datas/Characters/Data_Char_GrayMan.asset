@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4782971db7b9124dadecd68fe80f8bf, type: 3}
-  m_Name: Data_Char_Megaman
+  m_Name: Data_Char_GrayMan
   m_EditorClassIdentifier: 
-  Icon: {fileID: 1446672758, guid: 49fddf78c5520a042836e8b95a8546fb, type: 3}
-  Name: MegaMan
-  AnimatedPrefab: {fileID: 5913485514588316805, guid: d0edbb93eada50e46954844dac093eb6, type: 3}
-  AttackPrefab: {fileID: 4942357896856085429, guid: c3b92db4d3dd36746990120ec7ede7c9, type: 3}
+  Icon: {fileID: -1278861460, guid: 275b8e01402acf843af51db6416e7778, type: 3}
+  Name: GrayMan
+  AnimatedPrefab: {fileID: 5913485514588316805, guid: 206ae70933aadac4f86da73886b2cd9f, type: 3}
+  AttackPrefab: {fileID: 4942357896856085429, guid: 6eac82ff897320746b5dce6f801326f1, type: 3}
   AttackAnimStyle: 1
   MoveSpeed: 5
   RotationSpeed: 500

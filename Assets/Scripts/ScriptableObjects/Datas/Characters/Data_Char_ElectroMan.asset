@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4782971db7b9124dadecd68fe80f8bf, type: 3}
-  m_Name: Data_Char_Megaman
+  m_Name: Data_Char_ElectroMan
   m_EditorClassIdentifier: 
-  Icon: {fileID: 1446672758, guid: 49fddf78c5520a042836e8b95a8546fb, type: 3}
-  Name: MegaMan
-  AnimatedPrefab: {fileID: 5913485514588316805, guid: d0edbb93eada50e46954844dac093eb6, type: 3}
-  AttackPrefab: {fileID: 4942357896856085429, guid: c3b92db4d3dd36746990120ec7ede7c9, type: 3}
-  AttackAnimStyle: 1
+  Icon: {fileID: 1111705502, guid: 49fddf78c5520a042836e8b95a8546fb, type: 3}
+  Name: ElectroMan
+  AnimatedPrefab: {fileID: 3510257148501286111, guid: 4f13366906fe6ad429e1fb69a9a4f3f6, type: 3}
+  AttackPrefab: {fileID: 4942357896856085429, guid: 379ccd4cf6291c54aa131eb8a84a6464, type: 3}
+  AttackAnimStyle: 2
   MoveSpeed: 5
   RotationSpeed: 500
   JumpForce: 15
   AttackRechargeTime: 10
-  AttackDuration: 0.5
+  AttackDuration: 1

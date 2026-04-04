@@ -886,7 +886,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5456cddc5c5a8e349960833b173e4780, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerData: {fileID: 11400000, guid: da1f9b93899b5d742a324417ff2347af, type: 2}
+  _gameplayData: {fileID: 11400000, guid: 4d254becca17f0941ab05aed6ba686a2, type: 2}
   _rb: {fileID: 2763045688066559477}
   _visualTransform: {fileID: 139418061249717329}
   _ballSpawnPoint: {fileID: 942738556659211442}
