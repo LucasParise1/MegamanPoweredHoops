@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.Android.Gradle.Manifest;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,7 +9,7 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private GameObject _mainMenu;
     [SerializeField] private GameObject _charSelectMenu;
     [SerializeField] private GameplayData _gameplayData;
-    [SerializeField] private SceneAsset _nextScene;
+    [SerializeField] private string _nextScene;
 
     public void PlayButton()
     {
@@ -25,7 +24,7 @@ public class MainMenuManager : MonoBehaviour
         Invoke(nameof(LoadNextScene), 1);
     }
 
-    public void QuitGame() => UnityEngine.Application.Quit();
+    public void QuitGame() => Application.Quit();
 
     private IEnumerator CharacterSelectionRoutine()
     {
@@ -39,5 +38,5 @@ public class MainMenuManager : MonoBehaviour
         _fadeScreen.SetInteger(AnimationsParameters.FADE_VALUE, 0);
     }
 
-    private void LoadNextScene() => SceneManager.LoadScene(_nextScene.name);
+    private void LoadNextScene() => SceneManager.LoadScene(_nextScene);
 }

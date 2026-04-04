@@ -3002,7 +3002,7 @@ MonoBehaviour:
   _mainMenu: {fileID: 2028476966}
   _charSelectMenu: {fileID: 2143400981}
   _gameplayData: {fileID: 11400000, guid: 4d254becca17f0941ab05aed6ba686a2, type: 2}
-  _nextScene: {fileID: 102900000, guid: 99c9720ab356a0642a771bea13969a05, type: 3}
+  _nextScene: Gameplay
 --- !u!4 &1688592720
 Transform:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private UIManager _uiManager;
     [SerializeField] private Player _player;
     [SerializeField] private Animator _fadeScreen;
-    [SerializeField] private SceneAsset _nextScene;
+    [SerializeField] private string _nextScene;
 
     private float _currentTime;
     private bool _isPlaying;
@@ -93,5 +93,5 @@ public class GameplayManager : MonoBehaviour
         Invoke(nameof(LoadNextScene), 1);
     }
 
-    private void LoadNextScene() => SceneManager.LoadScene(_nextScene.name);
+    private void LoadNextScene() => SceneManager.LoadScene(_nextScene);
 }
