@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c417db010049244ad60a4cbca22d60, type: 3}
   m_Name: GameplayData
   m_EditorClassIdentifier: 
-  MatchTime: 30
+  MatchTime: 90
   Player1Points: 0
   Player2Points: 0
